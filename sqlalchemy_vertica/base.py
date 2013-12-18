@@ -151,6 +151,8 @@ class VerticaDialect(PyODBCConnector, PGDialect):
             if '(' in dtype:
                 dtype = dtype.split('(')[0]
             coltype = self.ischema_names[dtype]
+            if coltype in [ sqltypes.CHAR, sqltypes.VARCHAR ]:
+                coltype = coltype(row.character_maximum_length)
             primary_key = name in pk_columns
             default = row.column_default
             nullable = row.is_nullable
